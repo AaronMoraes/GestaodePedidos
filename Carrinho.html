@@ -176,6 +176,22 @@
                 document.getElementById('finalize-btn').disabled = true;
                 return;
             }
+
+            if(cart.length == 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart-message text-center py-5">
+                        <h5>Seu carrinho está vazio</h5>
+                        <p>Adicione itens para continuar</p>
+                        </div>
+                `;
+                itemCountElement.textContent = '0';
+                subtotalElement.textContent = 'R$ 0,00';
+                totalElement.textContent = 'R$ 0,00';
+                document.getElementById('finalize-btn').disabled = true;
+                return;
+            }
+
+            document.getElementById('finalize-btn').disabled = false;
             
             let cartHTML = '';
             let subtotal = 0;
@@ -268,7 +284,7 @@
             });
         });
         
-        document.getElementById('finalize-btn').addEventListener('click', function() {
+        document.getElementById('finalize-btn').addEventListener('click', async function() {
             const selectedMethod = document.querySelector('.payment-method.selected');
             
             if (!selectedMethod) {
@@ -277,7 +293,38 @@
             }
             
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            const pedido = {
+                status: "Pendente",
+                formaPagamento: selectedMethod.getAttribute('data-method'),
+                itens: cart.map(item => ({
+                    produtoId: parseInt(item.id),
+                    quantidade: item.quantity,
+                }))
+            };
+
+            console.log('Pedido enviado:', pedido);
+
+            const resposta = await fetch(
+                'https://effective-spork-q7qwqqwvrg4vf99qx-5000.app.github.dev/api/Pedidos',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify(pedido)
+            }
+        );
+
+        if (!resposta.ok) {
+            const erro = await resposta.text();
+            console.error('Erro ao criar pedido: ', erro);
+            alert('Não foi possivel finalizar o pedido. ');
+            return;
+        }
             
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('confirmation-message').style.display = 'block';
