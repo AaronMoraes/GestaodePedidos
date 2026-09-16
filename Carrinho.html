@@ -107,7 +107,7 @@
             });
             
             cartItemsContainer.innerHTML = cartHTML;
-            itemCountElement.textContent = cart.length;
+            itemCountElement.textContent = cart.reduce((total, item) => total + item.quantity, 0);
             subtotalElement.textContent = `R$ ${subtotal.toFixed(2)}`;
             totalElement.textContent = `R$ ${subtotal.toFixed(2)}`;
             
@@ -153,7 +153,7 @@
 
             console.log('Pedido enviado:', pedido);
             try {
-                const resposta = await fetch('https://effective-spork-q7qwqqwvrg4vf99qx-5000.app.github.dev/api/Pedidos', {
+                const resposta = await fetch('https://effective-spork-q7qwqqwvr4g4vf99qx-5000.app.github.dev/api/Pedidos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(pedido)
