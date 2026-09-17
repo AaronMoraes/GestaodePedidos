@@ -4,17 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Podrão - Bebidas</title>
+    <title>PedeGo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body {
             background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* NAVBAR */
+
         #nav {
             background-color: #222222 !important;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
@@ -76,77 +77,125 @@
             text-shadow: 0 0 12px rgba(255, 107, 53, 0.45);
         }
 
-        /* TÍTULO */
+
         .section-title {
             color: #222222;
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
             position: relative;
             display: block;
             width: fit-content;
             margin: 50px auto 40px;
-            padding-bottom: 10px;
+            font-size: 2.2rem;
+            font-weight: 800;
         }
 
         .section-title::after {
-            content: "";
+            content: '';
             position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 45%;
+            width: 100px;
             height: 3px;
             background-color: #FF6B35;
-            border-radius: 3px;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
 
-        /* CARDS */
+
         .card {
             margin-bottom: 30px;
-            border: none;
+            border: 1px solid #EAEAEA;
             border-radius: 14px !important;
             overflow: hidden;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
             background-color: #FFFFFF;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
         }
+
 
         .card-img-top {
+            width: 100%;
             height: 220px;
-            object-fit: cover;
+            object-fit: contain;
+            padding: 15px;
+            background-color: #FFFFFF;
             border-bottom: 3px solid #FF6B35;
+            transition: transform 0.4s ease;
         }
 
-        /* BADGES */
+        .card:hover .card-img-top {
+            transform: scale(1.03);
+        }
+
+        .card-title {
+            color: #222222;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            min-height: 29px;
+            display: flex;
+            align-items: center;
+        }
+
+
         .badge-bebida {
             position: absolute;
             top: 15px;
             right: 15px;
-            padding: 6px 15px;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .badge-bebida {
+            transform: translateY(-2px);
         }
 
         .badge-popular {
             background-color: #FF6B35;
+            color: #FFFFFF;
         }
 
         .badge-new {
             background-color: #222222;
+            color: #FFFFFF;
         }
 
-        /* CONTEÚDO DOS CARDS */
+        .produtos-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 15px 30px;
+        }
+
+
         .bebida-price {
             color: #FF6B35 !important;
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             font-weight: 800;
+            margin: 15px 0 !important;
+        }
+
+        .card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .add-to-cart {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 10px;
         }
 
         .card-text {
@@ -154,99 +203,167 @@
             min-height: 60px;
         }
 
-        /* QUANTIDADE + BOTÃO */
+
         .add-to-cart {
             display: flex;
             align-items: center;
+            gap: 15px;
             margin-top: 15px;
         }
 
-        .quantity-select {
-            width: 80px;
-            margin-right: 15px;
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 110px;
+            height: 44px;
             border: 2px solid #E5E5E5;
-            border-radius: 8px;
-            padding: 8px;
-            color: #222222;
+            border-radius: 9px;
             background-color: #FFFFFF;
+            overflow: hidden;
         }
 
-        .quantity-select:focus {
-            border-color: #FF6B35;
-            box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.15);
-            outline: none;
+        .quantity-btn {
+            width: 34px;
+            height: 100%;
+            border: none;
+            background-color: transparent;
+            color: #FF6B35;
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quantity-btn:hover {
+            background-color: #FFF1EB;
+        }
+
+        .quantity-select {
+            min-width: 30px;
+            text-align: center;
+            color: #222222;
+            font-weight: 700;
+            font-size: 1rem;
         }
 
         .btn-adicionar {
             background-color: #FF6B35;
             color: #FFFFFF;
             border: none;
-            padding: 10px 15px;
-            border-radius: 9px;
+            height: 44px;
+            padding: 0 15px;
+            border-radius: 8px;
             flex-grow: 1;
             font-weight: 700;
             transition: all 0.3s ease;
         }
 
         .btn-adicionar:hover {
-            background-color: #FF6B35;
+            background-color: #E85A2A;
             color: #FFFFFF;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 5px 12px rgba(255, 107, 53, 0.25);
         }
 
-        /* CARRINHO */
-        .carrinho-painel {
+        .carrinho-flutuante {
             position: fixed;
-            top: 100px;
             right: 20px;
-            width: 280px;
-            background-color: #FFFFFF;
-            padding: 20px;
-            border: none;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            bottom: 20px;
             z-index: 1000;
-            border-radius: 14px;
         }
 
-        .carrinho-painel h4 {
-            color: #222222;
-            border-bottom: 3px solid #FF6B35;
-            padding-bottom: 10px;
-        }
-
-        .btn-remover {
+        .carrinho-flutuante-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             background-color: #222222;
             color: #FFFFFF;
-            border: none;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            display: inline-flex;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+            transition: all 0.3s ease;
+        }
+
+        .carrinho-flutuante-link:hover {
+            color: #FFFFFF;
+            transform: translateY(-3px);
+            box-shadow: 0 9px 25px rgba(0, 0, 0, 0.22);
+        }
+
+        .carrinho-flutuante-icone {
+            position: relative;
+            width: 38px;
+            height: 38px;
+            background-color: #FF6B35;
+            border-radius: 9px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            font-size: 17px;
         }
 
-        .btn-remover:hover {
-            background-color: #FF6B35;
+        #carrinho-contador {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            min-width: 19px;
+            height: 19px;
+            padding: 0 5px;
+            background-color: #FFFFFF;
+            color: #222222;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carrinho-flutuante-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .carrinho-flutuante-info span {
+            color: #AAAAAA;
+            font-size: 11px;
+        }
+
+        .carrinho-flutuante-info strong {
             color: #FFFFFF;
-            transform: scale(1.1);
+            font-size: 14px;
+            margin-top: 3px;
         }
 
-        /* FOOTER */
+        .carrinho-flutuante-seta {
+            color: #FF6B35;
+            font-size: 13px;
+            margin-left: 4px;
+        }
+
+
         footer {
             background-color: #222222 !important;
-            color: #FFFFFF;
             padding: 50px 0 20px;
             margin-top: 80px;
             border-top: 3px solid #FF6B35;
         }
 
-        .footer-logo {
-            width: 150px;
-            margin-bottom: 20px;
+        .footer-logo-text {
+            color: #FF6B35;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 15px;
+        }
+
+        .footer-description {
+            color: #D6D6D6;
+            max-width: 320px;
+            line-height: 1.6;
         }
 
         .footer-title {
@@ -256,10 +373,40 @@
             font-weight: 700;
         }
 
-        .footer-contact i {
+        footer ul li {
+            color: #D6D6D6;
+        }
+
+        .footer-contact i,
+        footer ul li i {
             color: #FF6B35;
             margin-right: 10px;
-            width: 20px;
+            width: 18px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer-social {
+            width: 38px;
+            height: 38px;
+            border: 1px solid #444444;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social:hover {
+            background-color: #FF6B35;
+            border-color: #FF6B35;
+            color: #FFFFFF;
+            transform: translateY(-3px);
         }
 
         .footer-divider {
@@ -267,27 +414,40 @@
             margin: 30px 0;
         }
 
-        /* RESPONSIVIDADE */
+        .footer-link {
+            color: #AAAAAA;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #FF6B35;
+        }
+
+
         @media (max-width: 768px) {
             .card-img-top {
                 height: 200px;
-            }
-
-            .carrinho-painel {
-                width: 90%;
-                left: 5%;
-                right: auto;
             }
         }
     </style>
 </head>
 
 <body>
-    <div id="carrinho-painel" class="carrinho-painel">
-        <h4>Seu Pedido</h4>
-        <div id="carrinho-itens">
-            <p>Carrinho vazio</p>
-        </div>
+    <div id="carrinho-painel" class="carrinho-flutuante">
+        <a href="Carrinho.html" class="carrinho-flutuante-link">
+            <div class="carrinho-flutuante-icone">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="carrinho-contador">0</span>
+            </div>
+
+            <div class="carrinho-flutuante-info">
+                <span>Seu pedido</span>
+                <strong id="carrinho-total">R$ 0,00</strong>
+            </div>
+
+            <i class="fas fa-chevron-right carrinho-flutuante-seta"></i>
+        </a>
     </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark" id="nav">
@@ -340,7 +500,7 @@
         </div>
     </nav>
 
-    <div class="container mb-5">
+    <div class="container mb-5 produtos-container">
         <h2 class="text-center section-title">Nossas Bebidas</h2>
         <div class="row g-4">
             <div class="col-md-4">
@@ -350,14 +510,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Coca-Cola 350mL</h5>
                         <div class="bebida-price my-3">R$ 6,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -367,14 +527,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Coca-Cola 1L</h5>
                         <div class="bebida-price my-3">R$ 10,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -384,14 +544,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Coca-Cola 2L</h5>
                         <div class="bebida-price my-3">R$ 15,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -401,14 +561,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Guaraná Antarctica 350mL</h5>
                         <div class="bebida-price my-3">R$ 5,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -418,14 +578,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Sprite 350mL</h5>
                         <div class="bebida-price my-3">R$ 5,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -435,14 +595,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Fanta Laranja 350ml</h5>
                         <div class="bebida-price my-3">R$ 5,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -452,14 +612,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Fanta Uva 350ml</h5>
                         <div class="bebida-price my-3">R$ 5,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -470,14 +630,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Suco de Laranja 500ml</h5>
                         <div class="bebida-price my-3">R$ 10,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -488,14 +648,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Suco de Uva 500ml</h5>
                         <div class="bebida-price my-3">R$ 12,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -506,14 +666,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Suco de Maracujá 500ml</h5>
                         <div class="bebida-price my-3">R$ 15,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -523,14 +683,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Heineken Long Neck</h5>
                         <div class="bebida-price my-3">R$ 10,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -540,14 +700,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Corona Long Neck</h5>
                         <div class="bebida-price my-3">R$ 8,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -557,14 +717,14 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Budweiser Long Neck</h5>
                         <div class="bebida-price my-3">R$ 9,00</div>
-                        <div class="add-to-cart"><select class="quantity-select">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select><button class="btn-adicionar">Adicionar</button></div>
+                        <div class="add-to-cart">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn quantity-minus">−</button>
+                                <span class="quantity-select">1</span>
+                                <button type="button" class="quantity-btn quantity-plus">+</button>
+                            </div>
+                            <button class="btn-adicionar">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -574,42 +734,89 @@
     <footer class="text-white">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4"><img src="Logo_Meu_podrão_ok.png" alt="Logo Meu Podrão" class="footer-logo">
-                    <p>Lanches artesanais feitos com ingredientes frescos e selecionados.</p>
-                    <div class="social-icons mt-3"><a href="#" class="text-white me-3"><i
-                                class="fab fa-facebook-f"></i></a><a href="#" class="text-white me-3"><i
-                                class="fab fa-instagram"></i></a><a href="#" class="text-white"><i
-                                class="fab fa-whatsapp"></i></a></div>
-                </div>
+
                 <div class="col-lg-4 mb-4">
-                    <h5 class="footer-title">Horário de Funcionamento</h5>
+                    <h3 class="footer-logo-text">PedeGo</h3>
+                    <p class="footer-description">
+                        Seu pedido, do seu jeito. Escolha seus favoritos e aproveite.
+                    </p>
+
+                    <div class="social-icons mt-3">
+                        <a href="#" class="footer-social">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer-social">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="#" class="footer-social">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 mb-4">
+                    <h5 class="footer-title">Funcionamento</h5>
+
                     <ul class="list-unstyled">
-                        <li class="mb-2"><i class="fas fa-clock me-2"></i> Segunda a Sexta: 18h - 23h</li>
-                        <li class="mb-2"><i class="fas fa-clock me-2"></i> Sábado: 17h - 00h</li>
-                        <li><i class="fas fa-clock me-2"></i> Domingo: 17h - 00h</li>
+                        <li class="mb-2">
+                            <i class="fas fa-clock"></i>
+                            Segunda a Sexta: 18h - 23h
+                        </li>
+
+                        <li class="mb-2">
+                            <i class="fas fa-clock"></i>
+                            Sábado: 17h - 00h
+                        </li>
+
+                        <li>
+                            <i class="fas fa-clock"></i>
+                            Domingo: 17h - 00h
+                        </li>
                     </ul>
                 </div>
+
                 <div class="col-lg-4 mb-4">
                     <h5 class="footer-title">Contato</h5>
+
                     <ul class="list-unstyled footer-contact">
-                        <li class="mb-2"><i class="fas fa-phone"></i> (11) 98765-4321</li>
-                        <li class="mb-2"><i class="fas fa-map-marker-alt"></i> Rua do Podrão, 123 - Centro</li>
-                        <li><i class="fas fa-envelope"></i> contato@meupodrao.com.br</li>
+                        <li class="mb-2">
+                            <i class="fas fa-phone"></i>
+                            (11) 98765-4321
+                        </li>
+
+                        <li class="mb-2">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Rua do Podrão, 123 - Centro
+                        </li>
+
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            contato@pedego.com.br
+                        </li>
                     </ul>
                 </div>
+
             </div>
+
             <hr class="footer-divider">
+
             <div class="row">
                 <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-0">&copy; 2025 Meu Podrão. Todos os direitos reservados.</p>
+                    <p class="mb-0">
+                        &copy; 2026 PedeGo. Todos os direitos reservados.
+                    </p>
                 </div>
-                <div class="col-md-6 text-center text-md-end"><a href="#" class="text-white mx-2">Política de
-                        Privacidade</a><a href="#" class="text-white mx-2">Termos de Uso</a><a href="#"
-                        class="text-white">Contato</a></div>
+
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="footer-link mx-2">Privacidade</a>
+                    <a href="#" class="footer-link mx-2">Termos de Uso</a>
+                    <a href="#" class="footer-link">Contato</a>
+                </div>
             </div>
+
         </div>
     </footer>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
@@ -632,23 +839,43 @@
             calcularTotal: function () { return this.obter().reduce((total, item) => total + (item.price * item.quantity), 0); },
             atualizarUI: function () {
                 const carrinho = this.obter();
-                const carrinhoItens = document.getElementById('carrinho-itens');
-                let html = '';
-                if (carrinho.length > 0) {
-                    html += '<ul style="list-style: none; padding: 0;">';
-                    carrinho.forEach(item => {
-                        const subtotal = item.price * item.quantity;
-                        html += `<li class="d-flex justify-content-between align-items-center mb-3"><div><strong>${item.quantity}x</strong> ${item.name}<div class="text-muted small">R$ ${subtotal.toFixed(2)}</div></div><button class="btn-remover" data-id="${item.id}" title="Remover">×</button></li>`;
-                    });
-                    html += '</ul><div class="d-flex justify-content-between align-items-center mt-4 mb-3"><h6 class="mb-0">Total:</h6><h5 class="mb-0">R$ ' + this.calcularTotal().toFixed(2) + '</h5></div><a href="Carrinho.html" class="btn btn-success w-100 py-2 fw-bold">Finalizar Pedido</a>';
-                } else { html = '<div class="text-center py-3"><i class="fas fa-shopping-cart fa-2x mb-3" style="color: #ddd;"></i><p class="mb-0">Carrinho vazio</p></div>'; }
-                carrinhoItens.innerHTML = html;
-                document.querySelectorAll('.btn-remover').forEach(btn => btn.addEventListener('click', e => this.remover(e.target.getAttribute('data-id'))));
+
+                const contador = document.getElementById('carrinho-contador');
+                const total = document.getElementById('carrinho-total');
+
+                const quantidadeItens = carrinho.reduce((total, item) => {
+                    return total + item.quantity;
+                }, 0);
+
+                const valorTotal = this.calcularTotal();
+
+                contador.textContent = quantidadeItens;
+                total.textContent = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
             }
         };
 
         document.addEventListener('DOMContentLoaded', function () {
             Carrinho.atualizarUI();
+            document.querySelectorAll('.quantity-control').forEach(control => {
+                const quantidade = control.querySelector('.quantity-select');
+
+                control.querySelector('.quantity-minus').addEventListener('click', () => {
+                    let valor = parseInt(quantidade.textContent);
+
+                    if (valor > 1) {
+                        quantidade.textContent = valor - 1;
+                    }
+                });
+
+                control.querySelector('.quantity-plus').addEventListener('click', () => {
+                    let valor = parseInt(quantidade.textContent);
+
+                    if (valor < 10) {
+                        quantidade.textContent = valor + 1;
+                    }
+                });
+            });
+
             document.querySelectorAll('.btn-adicionar').forEach(btn => {
                 btn.addEventListener('click', function () {
                     const card = this.closest('.card');
@@ -656,11 +883,11 @@
                     const produtoNome = card.querySelector('.card-title').textContent;
                     const produtoPreco = card.dataset.produtoPreco;
                     const produtoImagem = card.querySelector('.card-img-top').src;
-                    const quantidade = card.querySelector('.quantity-select').value;
+                    const quantidade = card.querySelector('.quantity-select').textContent;
                     Carrinho.adicionar(produtoId, produtoNome, produtoPreco, quantidade, produtoImagem);
+                    card.querySelector('.quantity-select').textContent = '1';
                     const originalText = this.innerHTML;
                     this.innerHTML = '<i class="fas fa-check me-2"></i> Adicionado!';
-                    this.classList.add('btn-success');
                     setTimeout(() => { this.innerHTML = originalText; this.classList.remove('btn-success'); }, 2000);
                 });
             });
