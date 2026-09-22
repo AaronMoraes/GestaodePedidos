@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script src="config.js"></script>
     <style>
         body {
             background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
@@ -577,181 +578,181 @@
         </button>
     </div>
 
-    <script>
-        function formatarPreco(valor) {
-            return valor.toFixed(2).replace('.', ',');
-        }
-
-        function loadCart() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const cartItemsContainer = document.getElementById('cart-items');
-            const itemCountElement = document.getElementById('item-count');
-            const subtotalElement = document.getElementById('subtotal');
-            const totalElement = document.getElementById('total');
-
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<div class="empty-cart-message text-center py-5"><h5>Seu carrinho está vazio</h5><p>Adicione itens para continuar</p></div>';
-                itemCountElement.textContent = '0';
-                subtotalElement.textContent = 'R$ 0,00';
-                totalElement.textContent = 'R$ 0,00';
-                document.getElementById('finalize-btn').disabled = true;
-                return;
+        <script>
+            function formatarPreco(valor) {
+                return valor.toFixed(2).replace('.', ',');
             }
 
-            document.getElementById('finalize-btn').disabled = false;
-            let cartHTML = '';
-            let subtotal = 0;
+            function loadCart() {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const cartItemsContainer = document.getElementById('cart-items');
+                const itemCountElement = document.getElementById('item-count');
+                const subtotalElement = document.getElementById('subtotal');
+                const totalElement = document.getElementById('total');
 
-            cart.forEach(item => {
-                subtotal += item.price * item.quantity;
-                cartHTML += `
-                    <div class="cart-item" data-id="${item.id}">
-                        <div class="cart-item-image">
-                            <img src="${item.image}" alt="${item.name}">
-                        </div>
-
-                        <div class="cart-item-info">
-                            <h6>${item.name}</h6>
-                            <p>${item.description || ''}</p>
-                            <strong>R$ ${formatarPreco(item.price)}</strong>
-                        </div>
-
-                        <div class="cart-item-actions">
-                            <div class="quantity-control">
-                            <button class="minus-btn" type="button">−</button>
-                            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
-                            <button class="plus-btn" type="button">+</button>
-                        </div>
-
-                        <button class="remove-btn" type="button"><i class="bi bi-trash3"></i>Remover</button>
-                    </div>
-                </div>
-            `;
-            });
-
-            cartItemsContainer.innerHTML = cartHTML;
-            itemCountElement.textContent = cart.reduce((total, item) => total + item.quantity, 0);
-            subtotalElement.textContent = `R$ ${formatarPreco(subtotal)}`;
-            totalElement.textContent = `R$ ${formatarPreco(subtotal)}`;
-
-            document.querySelectorAll('.plus-btn').forEach(btn => btn.addEventListener('click', function () { updateQuantity(this.closest('.cart-item').dataset.id, 1); }));
-            document.querySelectorAll('.minus-btn').forEach(btn => btn.addEventListener('click', function () { updateQuantity(this.closest('.cart-item').dataset.id, -1); }));
-            document.querySelectorAll('.remove-btn').forEach(btn => btn.addEventListener('click', function () { removeItem(this.closest('.cart-item').dataset.id); }));
-        }
-
-        function updateQuantity(itemId, change) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const itemIndex = cart.findIndex(item => String(item.id) === String(itemId));
-            if (itemIndex !== -1) {
-                cart[itemIndex].quantity += change;
-                if (cart[itemIndex].quantity <= 0) cart.splice(itemIndex, 1);
-                localStorage.setItem('cart', JSON.stringify(cart));
-                loadCart();
-            }
-        }
-
-        function removeItem(itemId) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart = cart.filter(item => String(item.id) !== String(itemId));
-            localStorage.setItem('cart', JSON.stringify(cart));
-            loadCart();
-        }
-
-        document.querySelectorAll('.payment-method').forEach(method => method.addEventListener('click', function () {
-            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
-            this.classList.add('selected');
-
-            document.getElementById('payment-error').style.display = 'none';
-        }));
-
-        document.getElementById('finalize-btn').addEventListener('click', async function () {
-            const selectedMethod = document.querySelector('.payment-method.selected');
-
-            if (!selectedMethod) {
-                document.getElementById('payment-error').style.display = 'block';
-                return;
-            }
-
-            document.getElementById('payment-error').style.display = 'none';
-
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const pedido = {
-                status: "Pendente",
-                formaPagamento: selectedMethod.getAttribute('data-method'),
-                itens: cart.map(item => ({ produtoId: parseInt(item.id), quantidade: item.quantity }))
-            };
-
-            let pedidoCriado;
-
-            console.log('Pedido enviado:', pedido);
-            try {
-                const resposta = await fetch('http://localhost:5000/api/Pedidos', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(pedido)
-                });
-                if (!resposta.ok) {
-                    const erro = await resposta.text();
-                    console.error('Erro ao criar pedido: ', erro);
-
-                    document.getElementById('order-error').style.display = 'block';
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = '<div class="empty-cart-message text-center py-5"><h5>Seu carrinho está vazio</h5><p>Adicione itens para continuar</p></div>';
+                    itemCountElement.textContent = '0';
+                    subtotalElement.textContent = 'R$ 0,00';
+                    totalElement.textContent = 'R$ 0,00';
+                    document.getElementById('finalize-btn').disabled = true;
                     return;
                 }
 
-                pedidoCriado = await resposta.json();
-                console.log('Pedido criado pela API:', JSON.stringify(pedidoCriado, null, 2));
+                document.getElementById('finalize-btn').disabled = false;
+                let cartHTML = '';
+                let subtotal = 0;
 
-            } catch (erro) {
-                console.error('Erro de comunicação com a API:', erro);
+                cart.forEach(item => {
+                    subtotal += item.price * item.quantity;
+                    cartHTML += `
+                        <div class="cart-item" data-id="${item.id}">
+                            <div class="cart-item-image">
+                                <img src="${item.image}" alt="${item.name}">
+                            </div>
 
-                document.getElementById('order-error').textContent = '⚠️ Não foi possível conectar à API para finalizar o pedido.';
-                document.getElementById('order-error').style.display = 'block';
+                            <div class="cart-item-info">
+                                <h6>${item.name}</h6>
+                                <p>${item.description || ''}</p>
+                                <strong>R$ ${formatarPreco(item.price)}</strong>
+                            </div>
 
-                return;
+                            <div class="cart-item-actions">
+                                <div class="quantity-control">
+                                <button class="minus-btn" type="button">−</button>
+                                <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                                <button class="plus-btn" type="button">+</button>
+                            </div>
+
+                            <button class="remove-btn" type="button"><i class="bi bi-trash3"></i>Remover</button>
+                        </div>
+                    </div>
+                `;
+                });
+
+                cartItemsContainer.innerHTML = cartHTML;
+                itemCountElement.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+                subtotalElement.textContent = `R$ ${formatarPreco(subtotal)}`;
+                totalElement.textContent = `R$ ${formatarPreco(subtotal)}`;
+
+                document.querySelectorAll('.plus-btn').forEach(btn => btn.addEventListener('click', function () { updateQuantity(this.closest('.cart-item').dataset.id, 1); }));
+                document.querySelectorAll('.minus-btn').forEach(btn => btn.addEventListener('click', function () { updateQuantity(this.closest('.cart-item').dataset.id, -1); }));
+                document.querySelectorAll('.remove-btn').forEach(btn => btn.addEventListener('click', function () { removeItem(this.closest('.cart-item').dataset.id); }));
             }
 
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('confirmation-message').style.display = 'block';
-            localStorage.removeItem('cart');
-            const totalOficial = pedidoCriado.itens.reduce(
-                (sum, item) => sum + (item.preco * item.quantidade),
-                0
-            );
-            const itensHtml = pedidoCriado.itens.map(item => `
-    <div class="confirmation-item">
-        <div>
-            <span class="confirmation-item-name">${item.produto.nome}</span>
-            <span class="confirmation-item-quantity">x${item.quantidade}</span>
+            function updateQuantity(itemId, change) {
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const itemIndex = cart.findIndex(item => String(item.id) === String(itemId));
+                if (itemIndex !== -1) {
+                    cart[itemIndex].quantity += change;
+                    if (cart[itemIndex].quantity <= 0) cart.splice(itemIndex, 1);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    loadCart();
+                }
+            }
+
+            function removeItem(itemId) {
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                cart = cart.filter(item => String(item.id) !== String(itemId));
+                localStorage.setItem('cart', JSON.stringify(cart));
+                loadCart();
+            }
+
+            document.querySelectorAll('.payment-method').forEach(method => method.addEventListener('click', function () {
+                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+                this.classList.add('selected');
+
+                document.getElementById('payment-error').style.display = 'none';
+            }));
+
+            document.getElementById('finalize-btn').addEventListener('click', async function () {
+                const selectedMethod = document.querySelector('.payment-method.selected');
+
+                if (!selectedMethod) {
+                    document.getElementById('payment-error').style.display = 'block';
+                    return;
+                }
+
+                document.getElementById('payment-error').style.display = 'none';
+
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const pedido = {
+                    status: "Pendente",
+                    formaPagamento: selectedMethod.getAttribute('data-method'),
+                    itens: cart.map(item => ({ produtoId: parseInt(item.id), quantidade: item.quantity }))
+                };
+
+                let pedidoCriado;
+
+                console.log('Pedido enviado:', pedido);
+                try {
+                    const resposta = await fetch(`${API_URL}/Pedidos`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(pedido)
+                    });
+                    if (!resposta.ok) {
+                        const erro = await resposta.text();
+                        console.error('Erro ao criar pedido: ', erro);
+
+                        document.getElementById('order-error').style.display = 'block';
+                        return;
+                    }
+
+                    pedidoCriado = await resposta.json();
+                    console.log('Pedido criado pela API:', JSON.stringify(pedidoCriado, null, 2));
+
+                } catch (erro) {
+                    console.error('Erro de comunicação com a API:', erro);
+
+                    document.getElementById('order-error').textContent = '⚠️ Não foi possível conectar à API para finalizar o pedido.';
+                    document.getElementById('order-error').style.display = 'block';
+
+                    return;
+                }
+
+                document.getElementById('overlay').style.display = 'block';
+                document.getElementById('confirmation-message').style.display = 'block';
+                localStorage.removeItem('cart');
+                const totalOficial = pedidoCriado.itens.reduce(
+                    (sum, item) => sum + (item.preco * item.quantidade),
+                    0
+                );
+                const itensHtml = pedidoCriado.itens.map(item => `
+        <div class="confirmation-item">
+            <div>
+                <span class="confirmation-item-name">${item.produto.nome}</span>
+                <span class="confirmation-item-quantity">x${item.quantidade}</span>
+            </div>
+            <strong>R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</strong>
         </div>
-        <strong>R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</strong>
-    </div>
-`).join('');
+    `).join('');
 
-            document.getElementById('order-details').innerHTML = `
-    <div class="confirmation-details">
-        <h6>Itens do pedido</h6>
-        ${itensHtml}
+                document.getElementById('order-details').innerHTML = `
+        <div class="confirmation-details">
+            <h6>Itens do pedido</h6>
+            ${itensHtml}
 
-        <div class="confirmation-payment">
-            Forma de pagamento: <strong>${selectedMethod.getAttribute('data-method') === 'pix' ? 'PIX' : 'Cartão'}</strong>
+            <div class="confirmation-payment">
+                Forma de pagamento: <strong>${selectedMethod.getAttribute('data-method') === 'pix' ? 'PIX' : 'Cartão'}</strong>
+            </div>
+
+            <div class="confirmation-total">
+                <span>Total</span>
+                <span>R$ ${totalOficial.toFixed(2).replace('.', ',')}</span>
+            </div>
         </div>
+    `;
+            });
 
-        <div class="confirmation-total">
-            <span>Total</span>
-            <span>R$ ${totalOficial.toFixed(2).replace('.', ',')}</span>
-        </div>
-    </div>
-`;
-        });
+            document.getElementById('close-message').addEventListener('click', function () {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('confirmation-message').style.display = 'none';
+                loadCart();
+            });
 
-        document.getElementById('close-message').addEventListener('click', function () {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('confirmation-message').style.display = 'none';
-            loadCart();
-        });
-
-        document.addEventListener('DOMContentLoaded', loadCart);
-    </script>
+            document.addEventListener('DOMContentLoaded', loadCart);
+        </script>
 </body>
 
 </html>
