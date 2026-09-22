@@ -402,6 +402,32 @@
             color: #A71D2A;
             transform: translateY(-1px);
         }
+
+        @media (max-width: 576px) {
+            .cart-item {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .cart-item-image {
+                width: 80px;
+                height: 70px;
+            }
+
+            .cart-item-info {
+                min-width: 0;
+            }
+
+            .cart-item-info h6 {
+                font-size: 15px;
+            }
+
+            .cart-item-actions {
+                width: 100%;
+                justify-content: space-between;
+                padding-left: 92px;
+            }
+        }
     </style>
 </head>
 
