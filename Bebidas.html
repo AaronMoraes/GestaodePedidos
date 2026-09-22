@@ -190,14 +190,6 @@
             flex-direction: column;
         }
 
-        .add-to-cart {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: auto;
-            padding-top: 10px;
-        }
-
         .card-text {
             color: #666666;
             min-height: 60px;
@@ -209,6 +201,7 @@
             align-items: center;
             gap: 15px;
             margin-top: 15px;
+            padding-top: 10px;
         }
 
         .quantity-control {
@@ -816,7 +809,7 @@
 
         </div>
     </footer>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
@@ -888,7 +881,7 @@
                     card.querySelector('.quantity-select').textContent = '1';
                     const originalText = this.innerHTML;
                     this.innerHTML = '<i class="fas fa-check me-2"></i> Adicionado!';
-                    setTimeout(() => { this.innerHTML = originalText; this.classList.remove('btn-success'); }, 2000);
+                    setTimeout(() => { this.innerHTML = originalText;}, 2000);
                 });
             });
         });

@@ -64,19 +64,14 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 480px;
             background-color: white;
-            padding: 30px;
-            border-radius: 10px;
+            padding: 35px;
+            border-radius: 16px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             text-align: center;
-        }
-
-        .confirmation-message {
-            width: 90%;
-            max-width: 480px;
-            padding: 35px;
-            border-radius: 16px;
         }
 
         .confirmation-icon {
@@ -480,24 +475,22 @@
                             <p><strong>Selecione a forma de pagamento</strong></p>
 
                             <div class="row">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="payment-method" data-method="pix">
-                                            <i class="bi bi-qr-code-scan payment-icon"></i>
-                                            <div>
-                                                <strong>PIX</strong>
-                                                <small>Pagamento instantâneo</small>
-                                            </div>
+                                <div class="col-md-6">
+                                    <div class="payment-method" data-method="pix">
+                                        <i class="bi bi-qr-code-scan payment-icon"></i>
+                                        <div>
+                                            <strong>PIX</strong>
+                                            <small>Pagamento instantâneo</small>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="col-md-6">
-                                        <div class="payment-method" data-method="cartao">
-                                            <i class="bi bi-credit-card payment-icon"></i>
-                                            <div>
-                                                <strong>Cartão</strong>
-                                                <small>Crédito ou débito</small>
-                                            </div>
+                                <div class="col-md-6">
+                                    <div class="payment-method" data-method="cartao">
+                                        <i class="bi bi-credit-card payment-icon"></i>
+                                        <div>
+                                            <strong>Cartão</strong>
+                                            <small>Crédito ou débito</small>
                                         </div>
                                     </div>
                                 </div>
@@ -559,6 +552,10 @@
     </div>
 
     <script>
+        function formatarPreco(valor) {
+            return valor.toFixed(2).replace('.', ',');
+        }
+
         function loadCart() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const cartItemsContainer = document.getElementById('cart-items');
@@ -590,7 +587,7 @@
                         <div class="cart-item-info">
                             <h6>${item.name}</h6>
                             <p>${item.description || ''}</p>
-                            <strong>R$ ${item.price.toFixed(2)}</strong>
+                            <strong>R$ ${formatarPreco(item.price)}</strong>
                         </div>
 
                         <div class="cart-item-actions">
@@ -608,8 +605,8 @@
 
             cartItemsContainer.innerHTML = cartHTML;
             itemCountElement.textContent = cart.reduce((total, item) => total + item.quantity, 0);
-            subtotalElement.textContent = `R$ ${subtotal.toFixed(2)}`;
-            totalElement.textContent = `R$ ${subtotal.toFixed(2)}`;
+            subtotalElement.textContent = `R$ ${formatarPreco(subtotal)}`;
+            totalElement.textContent = `R$ ${formatarPreco(subtotal)}`;
 
             document.querySelectorAll('.plus-btn').forEach(btn => btn.addEventListener('click', function () { updateQuantity(this.closest('.cart-item').dataset.id, 1); }));
             document.querySelectorAll('.minus-btn').forEach(btn => btn.addEventListener('click', function () { updateQuantity(this.closest('.cart-item').dataset.id, -1); }));
@@ -652,12 +649,13 @@
             document.getElementById('payment-error').style.display = 'none';
 
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const pedido = {
                 status: "Pendente",
                 formaPagamento: selectedMethod.getAttribute('data-method'),
                 itens: cart.map(item => ({ produtoId: parseInt(item.id), quantidade: item.quantity }))
             };
+
+            let pedidoCriado;
 
             console.log('Pedido enviado:', pedido);
             try {
@@ -673,6 +671,10 @@
                     document.getElementById('order-error').style.display = 'block';
                     return;
                 }
+
+                pedidoCriado = await resposta.json();
+                console.log('Pedido criado pela API:', JSON.stringify(pedidoCriado, null, 2));
+
             } catch (erro) {
                 console.error('Erro de comunicação com a API:', erro);
 
@@ -685,13 +687,17 @@
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('confirmation-message').style.display = 'block';
             localStorage.removeItem('cart');
-            const itensHtml = cart.map(item => `
+            const totalOficial = pedidoCriado.itens.reduce(
+                (sum, item) => sum + (item.preco * item.quantidade),
+                0
+            );
+            const itensHtml = pedidoCriado.itens.map(item => `
     <div class="confirmation-item">
         <div>
-            <span class="confirmation-item-name">${item.name}</span>
-            <span class="confirmation-item-quantity">x${item.quantity}</span>
+            <span class="confirmation-item-name">${item.produto.nome}</span>
+            <span class="confirmation-item-quantity">x${item.quantidade}</span>
         </div>
-        <strong>R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</strong>
+        <strong>R$ ${(item.preco * item.quantidade).toFixed(2).replace('.', ',')}</strong>
     </div>
 `).join('');
 
@@ -706,7 +712,7 @@
 
         <div class="confirmation-total">
             <span>Total</span>
-            <span>R$ ${total.toFixed(2).replace('.', ',')}</span>
+            <span>R$ ${totalOficial.toFixed(2).replace('.', ',')}</span>
         </div>
     </div>
 `;
